@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<script type="text/javascript">
+		window.onload = function () {
+			var dps = []; //dataPoints. 
+
+
+			var chart = new CanvasJS.Chart("chartContainer", {
+				animationEnabled: true,
+				exportEnabled: true,
+				theme: "light1", // "light1", "light2", "dark1", "dark2"
+				title: {
+					text: "Simple Column Chart with Index Labels"
+				},
+				axisY: {
+					includeZero: true
+				},
+				data: [{
+					type: "column", //change type to bar, line, area, pie, etc
+					//indexLabel: "{y}", //Shows y value on all Data Points
+					indexLabelFontColor: "#5A5757",
+					indexLabelFontSize: 16,
+					indexLabelPlacement: "outside",
+					dataPoints: dps
+				}]
+			});
+			function addDataPointsAndRender() {
+				xValue = Number(document.getElementById("xValue").value);
+				yValue = Number(document.getElementById("yValue").value);
+				dps.push({
+					x: xValue,
+					y: yValue
+				});
+				chart.render();
+			}
+
+			var renderButton = document.getElementById("renderButton");
+			renderButton.addEventListener("click", addDataPointsAndRender);
+		}
+	</script>
+</head>
+
+<body>
+	<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js">
+	</script>
+	X Value:
+	<input id="xValue" type="number" step="any" placeholder="Enter X-Value">
+	Y Value:
+	<input id="yValue" type="number" step="any" placeholder="Enter Y-Value">
+	<button id="renderButton">Add DataPoint & Render</button>
+	<div id="chartContainer" style="height: 270px; width: 100%;">
+	</div>
+
+	<script>
+		function loadDoc() {
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function () {
+				document.getElementById("demo").innerHTML =
+					this.responseText;
+				var data = JSON.parse(this.responseText);
+				dps.push({
+					x: xValue,
+					y: yValue
+				});
+				chart.render();
+			}
+			for (var i = 0; i < data.length; i++) {
+				dps.push(
+					data.getElementById(i)
+				)
+			}
+			xhttp.open("GET", "/api/barchart");
+			xhttp.send();
+		}
+	</script>
+</body>
+<a th:href="@{/api/barchart}">Bar-Chart</a><br />
+
+</html>

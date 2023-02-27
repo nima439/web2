@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+	<script type="text/javascript">
+		window.onload = function () {
+			var dps1 = [], dps2 = [];
+			var stockChart = new CanvasJS.StockChart("chartContainer", {
+				theme: "light2",
+				exportEnabled: true,
+				title: {
+					text: "StockChart with Date-Time Axis"
+				},
+				subtitles: [{
+					text: "Bitcoin Price (in USD)"
+				}],
+				charts: [{
+					axisX: {
+						crosshair: {
+							enabled: true,
+							snapToDataPoint: true
+						}
+					},
+					axisY: {
+						prefix: "$"
+					},
+					data: [{
+						type: "candlestick",
+						yValueFormatString: "$#,###.##",
+						dataPoints: dps1
+					}]
+				}],
+				navigator: {
+					data: [{
+						dataPoints: dps2
+					}],
+					slider: {
+						minimum: new Date(2018, 04, 01),
+						maximum: new Date(2023, 06, 01)
+					}
+				}
+			});
+			// Funktion zum Hinzufügen von Datenpunkten
+			function addDataPoint() {
+				var date = document.getElementById("date").value;
+				var open = parseFloat(document.getElementById("open").value);
+				var high = parseFloat(document.getElementById("high").value);
+				var low = parseFloat(document.getElementById("low").value);
+				var close = parseFloat(document.getElementById("close").value);
+				if (!isNaN(open) && !isNaN(high) && !isNaN(low) && !isNaN(close)) {
+					dps1.push({x: new Date(date), y: [open, high, low, close]});
+					dps2.push({x: new Date(date), y: close});
+					if (dps1.length > 100) {
+						dps1.shift();
+						dps2.shift();
+					}
+					stockChart.render();
+					document.getElementById("add-data-form").reset();
+				}
+			}
+			var renderButton = document.getElementById("add-data-form");
+			renderButton.addEventListener("click", addDataPoint);
+
+
+			// Ereignislistener für das Formular zur Hinzufügung von Datenpunkten
+			document.getElementById("add-data-form").addEventListener("submit", function (event) {
+				event.preventDefault();
+				addDataPoint();
+			});
+
+			// Laden der Daten von der API
+			$.getJSON("https://canvasjs.com/data/docs/btcusd2018.json", function (data) {
+				for (var i = 0; i < data.length; i++) {
+					dps1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
+					dps2.push({x: new Date(data[i].date), y: Number(data[i].close)});
+				}
+				stockChart.render();
+
+
+			});
+		}
+	</script>
+</head>
+
+<body>
+	<div id="chartContainer" style="height: 450px; width: 100%;"></div>
+	<form>
+		<label for="date">Datum:</label>
+		<input type="date" id="date" name="date"><br>
+
+		<label for="open">Eröffnungskurs:</label>
+		<input type="number" id="open" name="open"><br>
+
+		<label for="high">Höchstkurs:</label>
+		<input type="number" id="high" name="high"><br>
+
+		<label for="low">Tiefstkurs:</label>
+		<input type="number" id="low" name="low"><br>
+
+		<label for="close">Schlusskurs:</label>
+		<input type="number" id="close" name="close"><br>
+
+		<button type="button" id="add-data-button" onclick="addDataPoint()">Datenpunkt hinzufügen</button>
+	</form>
+
+</body>
+
+</html>

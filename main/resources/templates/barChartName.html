@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+		<script>
+		
+		var dps = []; //dataPoints
+		var chart; // declare chart variable
+		var initDB = new InitDB(); // declare instance of InitDB class
+
+		window.onload = function () {
+
+			chart = new CanvasJS.Chart("chartContainer", {
+
+				animationEnabled: true,
+				exportEnabled: true,
+
+				theme: "light2", // "light1", "light2", "dark1", "dark2"
+				title: {
+					text: "Simple Column Chart with Name Labels"
+				},
+				axisY: {
+					includeZero: true
+				},
+				data: [{
+					type: "column", //change type to bar, line, area, pie, etc
+					yValueFormatString: "#,##0.0#\"%\"",
+					//indexLabel: "{y}", //Shows y value on all Data Points
+					indexLabelFontColor: "#5A5757",
+					indexLabelFontSize: 16,
+					indexLabelPlacement: "outside",
+					dataPoints: dps
+				}]
+			});
+
+			function addDataPointsAndRender() {
+				var xValue = String(document.getElementById("xValue").value);
+				var yValue = Number(document.getElementById("yValue").value);
+				dps.push({
+					label: xValue,
+					y: yValue
+				});
+				initDB.addValue(yValue); // Hinzufügen des Wertes zur initDB
+				console.log(dps); //wird auf der Console Gelogged
+				chart.render();
+			}
+
+			var renderButton = document.getElementById("renderButton");
+			renderButton.addEventListener("click", addDataPointsAndRender);
+
+			loadDoc();
+		}
+
+	function loadDoc() {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var data = JSON.parse(this.responseText);
+					console.log(data);
+					for (var i = 0; i < data.length; i++) {
+						dps.push({
+							label: data[i].label,
+							y: data[i].wert,
+						});
+					}
+					chart.render();
+				}
+			};
+			xhttp.open("GET", "/api/barChartName", true);
+			xhttp.send();
+		}
+
+		function sendParameters() {
+			var xValue = String(document.getElementById("xValue").value);
+			var yValue = Number(document.getElementById("yValue").value);
+			var data = {
+				"xValue": xValue,
+				"yValue": yValue
+			};
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "/api/barChartName");
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.send(JSON.stringify(data));
+			console.log("Parameters sent:", data);
+		}
+
+		// InitDB class for storing yValues
+		function InitDB() {
+			this.data = [];
+
+			this.addValue = function (value) {
+				this.data.push(value);
+			}
+
+			this.getValues = function () {
+				return this.data;
+			}
+		}
+
+	</script>
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+
+<body>
+	<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+	X Value:
+	<input id="xValue" type="Text" step="any" placeholder="Enter Name for X-Axis">
+	Y Value:
+	<input id="yValue" type="number" step="any" placeholder="Enter Y-Value">
+	<button id="renderButton">Add DataPoint & Render</button>
+	<div id="chartContainer" style="height: 270px; width: 100%;">
+	</div>
+	<div>
+		<button onclick="loadDoc()">load</button>
+	</div>
+
+	<script>
+
+	</script>
+</body>
+
+</html>

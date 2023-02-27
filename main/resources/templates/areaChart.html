@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<script type="text/javascript">
+		window.onload = function () {
+
+
+			var ann = [1];
+			var ann_labels = ["your data"];
+
+			var annotations_array = ann.map(function (value, index) {
+				return {
+					type: 'line',
+					id: 'vline' + index,
+					mode: 'vertical',
+					scaleID: 'x-axis-0',
+					value: value,
+					borderColor: 'red',
+					borderWidth: 2,
+					label: {
+						enabled: true,
+						position: "center",
+						content: ann_labels[index]
+					}
+				}
+			});
+			console.log(annotations_array)
+
+			var data = [{
+				x: 0,
+				y: 5
+			}, {
+				x: 1,
+				y: 6
+			}, {
+				x: 2,
+				y: 8
+			}, {
+				x: 3,
+				y: 9
+			}];
+
+			var dps = []; //dataPoints. 
+
+			var chart = new CanvasJS.Chart("chartContainer", {
+				animationEnabled: true,
+				exportEnabled: true,
+				title: {
+					text: "Custom Area Chart"
+				},
+				axisY: {
+					//	valueFormatString: "#0,.",
+
+				},
+				axisX: {
+					title: "X-Axis"
+				},
+				toolTip: {
+					shared: true
+				},
+				data: [{
+					type: "stackedArea",
+					showInLegend: true, toolTipContent: "<span style=\"color:#4F81BC\"><strong>{name}: </strong></span> {y}",
+					name: "Numbers",
+					dataPoints: dps
+				}]
+			});
+
+			function addDataPointsAndRender() {
+				xValue = Number(document.getElementById("xValue").value);
+				yValue = Number(document.getElementById("yValue").value);
+				dps.push({
+					x: xValue,
+					y: yValue
+				});
+				chart.render();
+			}
+
+			var renderButton = document.getElementById("renderButton");
+			renderButton.addEventListener("click", addDataPointsAndRender);
+		}
+	</script>
+</head>
+
+<body>
+	X Value:
+	<input id="xValue" type="number" step="any" placeholder="Enter X-Value">
+	Y Value:
+	<input id="yValue" type="number" step="any" placeholder="Enter Y-Value">
+	<button id="renderButton">Add DataPoint & Render</button>
+	<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	</div>
+	
+	<canvas id="ctx"></canvas>
+
+</body>
+
+</html>

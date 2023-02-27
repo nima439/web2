@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <script>
+        window.onload = function() {
+
+            var dps = []; //dataPoints. 
+ var chart = new CanvasJS.Chart("chartContainer1", //Oben links Line Area
+    {
+        animationEnabled: true,
+        title: {
+            text: "Spline Area Chart"
+        },
+        axisX: {
+            interval: 10,
+        },
+        data: [
+        {
+            type: "splineArea",
+            color: "rgba(255,12,32,.3)",
+              dataPoints: dps
+        },
+        ]
+    });
+ function addDataPointsAndRender() {
+                xValue = Number(document.getElementById("xValue").value);
+                yValue = Number(document.getElementById("yValue").value);
+                dps.push({
+                    x: xValue,
+                    y: yValue
+                });
+                chart.render();
+            }
+
+            var renderButton = document.getElementById("renderButton");
+            renderButton.addEventListener("click", addDataPointsAndRender);
+        }
+
+var chart = new CanvasJS.Chart("chartContainer2", //oben Rechts Kreisdiagramm
+    {
+        animationEnabled: true,
+        title: {
+            text: "Pie Chart",
+        },
+        data: [
+        {
+            type: "pie",
+            showInLegend: true,
+            dataPoints: [
+                { y: 4181563, legendText: "PS 3", indexLabel: "PlayStation 3" },
+                { y: 2175498, legendText: "Wii", indexLabel: "Wii" },
+                { y: 3125844, legendText: "360", indexLabel: "Xbox 360" },
+                { y: 1176121, legendText: "DS", indexLabel: "Nintendo DS" },
+                { y: 1727161, legendText: "PSP", indexLabel: "PSP" },
+                { y: 4303364, legendText: "3DS", indexLabel: "Nintendo 3DS" },
+                { y: 1717786, legendText: "Vita", indexLabel: "PS Vita" }
+            ]
+        },
+        ]
+    });
+chart.render();
+
+var chart = new CanvasJS.Chart("chartContainer3", //unten Links Line Chart name
+    {
+        animationEnabled: true,
+        title: {
+            text: "Line Chart"
+        },
+        axisX: {
+            valueFormatString: "MMM",
+            interval: 1,
+            intervalType: "month"
+        },
+        axisY: {
+            includeZero: false
+        },
+        data: [
+        {
+          type: "line",
+           dataPoints: dps
+        }
+        ]
+    });
+     function addDataPointsAndRender3() {
+            xValue = String(document.getElementById("xValue").value);
+            yValue = Number(document.getElementById("yValue").value);
+                dps.push({
+                    label: xValue,
+                    y: yValue
+                });
+                chart.render();
+            }
+
+            var renderButton = document.getElementById("renderButton");
+            renderButton.addEventListener("click", addDataPointsAndRender);
+
+var chart = new CanvasJS.Chart("chartContainer4", //unten rechts Barchart name
+    {
+        animationEnabled: true,
+        title: {
+            text: "Column Chart"
+        },
+        axisX: {
+            interval: 10,
+        },
+        data: [
+        {
+            type: "column",
+            legendMarkerType: "triangle",
+            legendMarkerColor: "green",
+            color: "rgba(255,12,32,.3)",
+            showInLegend: true,
+            legendText: "Country wise population",
+             dataPoints: dps
+        },
+        ]
+    });
+chart.render();
+
+  function addDataPointsAndRender3() {
+            xValue = String(document.getElementById("xValue").value);
+            yValue = Number(document.getElementById("yValue").value);
+                dps.push({
+                    label: xValue,
+                    y: yValue
+                });
+                chart.render();
+            }
+
+            var renderButton = document.getElementById("renderButton");
+            renderButton.addEventListener("click", addDataPointsAndRender);
+    </script>
+</head>
+
+<body>
+
+ <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<div id="chartContainer1" style="width: 45%; height: 300px;display: inline-block;"></div> 
+<div id="chartContainer2" style="width: 45%; height: 300px;display: inline-block;"></div><br/>
+<div id="chartContainer3" style="width: 45%; height: 300px;display: inline-block;"></div>
+<div id="chartContainer4" style="width: 45%; height: 300px;display: inline-block;"></div>
+    </div>
+      X Value:
+    <input id="xValue" type="number" step="any" placeholder="Enter X-Value"> 
+    Y Value:
+    <input id="yValue" type="number" step="any" placeholder="Enter Y-Value">
+    <button id="renderButton">Add DataPoint & Render</button>
+</body>
+
+</html>

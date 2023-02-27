@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Datavisualisation</title>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<title>Datenvisualisierungssystem</title>
+</head>
+
+<body>
+	<h1>
+		<center> Willkommen zum besten Datenvisualisierungssystem </center>
+	</h1>
+	<br>
+
+	<div align="center">
+		<a th:href="@{/dashboard}">Dashboard</a><br />
+		IN Work: <a th:href="@{/dashboard2}">Dashboard Test</a> <br /> <br />
+		<a th:href="@{/stockChart}">Stock Chart</a> 
+		<a th:href="@{/candlestickChart}">Candlestick Chart</a><br /> <br />
+		<a th:href="@{/barChart}">Bar-Chart</a><br />
+		<a th:href="@{/barChartName}">Bar-Chart with Name Label</a><br /><br />
+		IN Work: <a th:href="@{/pieChart}">Pie.Chart</a> <br />
+		<a th:href="@{/lineChart}"> Line-Chart</a> <br>
+		<a th:href="@{/areaChart}"> Area-Chart</a> <br>
+		<a th:href="@{/scatterChart}"> Scatter/Point-Chart</a> <br>
+		</a><br /><br />
+		IN Work: <a th:href="@{/table_form}">Table</a>
+	</div>
+
+	<body>
+
+		<div id="demo">
+			<h2>The XMLHttpRequest Object</h2>
+			<button type="button" onclick="loadDoc()">Change Content</button>
+		</div>
+
+		<script>
+			function loadDoc() {
+				const xhttp = new XMLHttpRequest();
+				xhttp.onload = function () {
+					document.getElementById("demo").innerHTML =
+						this.responseText;
+				}
+				xhttp.open("GET", "/api/barchart");
+				xhttp.send();
+			}
+		</script>
+
+	</body>
+
+</html>
+
+
+
+</body>
+
+</html>
